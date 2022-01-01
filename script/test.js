@@ -155,7 +155,6 @@ $(function() {
     //setup gradual points
     initialize_and_draw_line(outer_circles, lines);
 
-
     var rotate_obj = rotate(outer_circles, false);
     //clearInterval(rotate_obj);
 });
