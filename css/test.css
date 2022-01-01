@@ -77,10 +77,15 @@ svg {
 .line {
     transition: 2s;
     position: absolute;
-    background-color: #000;
+    stroke: rgb(84, 113, 177);
     height: 4px;
     cursor: pointer;
     z-index: 2;
+}
+
+#arrowhead {
+    stroke: rgb(84, 113, 177);
+    fill: rgb(84, 113, 177);
 }
 
 #outer_circle_1 {

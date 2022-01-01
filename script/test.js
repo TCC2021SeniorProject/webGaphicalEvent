@@ -47,18 +47,15 @@ function getOffset(element) {
 }
 
 function getTheta(x1, y1, x2, y2) {
-    console.log("x: " + (x2 - x1));
-    console.log("y: " + -(y2 - y1));
-    console.log("Theta: " + Math.atan(-(y2 - y1) / (x2 - x1)));
     return Math.atan(-(y2 - y1) / (x2 - x1));
 }
 
 function getWidth(r, theta) {
-    return Math.cos(theta) * r * 0.90;
+    return Math.cos(theta) * r;
 }
 
 function getHeight(r, theta) {
-    return Math.sin(theta) * r * 0.90;
+    return Math.sin(theta) * r;
 }
 
 //starts at the contour of the circle
