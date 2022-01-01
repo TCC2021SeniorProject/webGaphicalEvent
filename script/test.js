@@ -1,13 +1,16 @@
 //Used jquery
 
-const STRAIGHT_ANGLE = 180;
-const LINE_TIME_INTERVAL = 300;
+const STRAIGHT_ANGLE = 240;
 const CIRCLE_ROTATION_SPEED = 25;
+const FASTER_CIRCLE_ROTATION_SPEED = 15;
 const DEGREE_SHIFT = 1.5;
 const LINE_PADDING_VALUE = 7;
+const BACKWARD_MULTIPLIER = 19;
 
 function isZooming() {
-    var newPx_ratio = window.devicePixelRatio || window.screen.availWidth / document.documentElement.clientWidth;
+    var newPx_ratio = window.devicePixelRatio
+     || window.screen.availWidth
+      / document.documentElement.clientWidth;
     if (newPx_ratio != px_ratio) {
        px_ratio = newPx_ratio;
        return true;
@@ -16,113 +19,146 @@ function isZooming() {
     }
  }
 
-function rotate(outer_circles) {
+function rotate(outer_circles, faster) {
     counter = 0;
     var interval_obj = setInterval(function() {
         if (counter >= STRAIGHT_ANGLE) {
             counter = 0;
         }
         $(outer_circles).css({
-            'transform': 'rotate(' + counter * DEGREE_SHIFT + 'deg)'
+            'transform': 'rotate('
+              + counter * DEGREE_SHIFT + 'deg)'
         });
         counter++;
-    }, CIRCLE_ROTATION_SPEED);
+    }, (faster) ? FASTER_CIRCLE_ROTATION_SPEED
+         : CIRCLE_ROTATION_SPEED );
     return interval_obj;
 }
 
+//returns center points
 function getOffset(element) {
     var position = $(element).position();
     var xSize = $(element).width();
     var ySize = $(element).height();
     return {
-        left: position.left + xSize / 2,
-        top: position.top + ySize / 2
+        x: position.left + xSize / 2,
+        y: position.top + ySize / 2
     };
 }
 
 function getTheta(x1, y1, x2, y2) {
-    return Math.atan(((y2 - y1) / (x2 - x1)))
+    console.log("x: " + (x2 - x1));
+    console.log("y: " + -(y2 - y1));
+    console.log("Theta: " + Math.atan(-(y2 - y1) / (x2 - x1)));
+    return Math.atan(-(y2 - y1) / (x2 - x1));
 }
 
-function getStartPos(x1, y1, r, theta, flipped) {
-    if (flipped) {
-        return {
-            x1: x1 - Math.cos(theta) * r,
-            y1: y1 - Math.sin(theta) * r
-        }
-    } else {
-        return {
-            x1: x1 + Math.cos(theta) * r,
-            y1: y1 + Math.sin(theta) * r
-        }
+function getWidth(r, theta) {
+    return Math.cos(theta) * r * 0.90;
+}
+
+function getHeight(r, theta) {
+    return Math.sin(theta) * r * 0.90;
+}
+
+//starts at the contour of the circle
+function getStartPos(x1, y1, r, theta) {
+    return {
+        left: x1 + getWidth(r, theta),
+        top: y1 - getHeight(r, theta)
     }
 }
 
-function setEndPos(x2, y2, r, theta, flipped) {
-    if (flipped) {
-        return {
-            x2: x2 + Math.cos(theta) * r,
-            y2: y2 + Math.sin(theta) * r
-        }
-    } else {
-        return {
-            x2: x2 - Math.cos(theta) * r,
-            y2: y2 - Math.sin(theta) * r
-        }
+function getStartPosOpposite(x1, y1, r, theta) {
+    return {
+        left: x1 - getWidth(r, theta),
+        top: y1 + getHeight(r, theta)
     }
 }
 
+//ends at the contour of the circle
+function getEndPos(x2, y2, r, theta) {
+    return {
+        left: x2 - getWidth(r, theta),
+        top: y2 + getHeight(r, theta)
+    }
+}
 
-function centerLinePosition(line, x1, y1, x2, y2, r, flipped) {
-
-    var theta = getTheta(x1, y1, x2, y2);
-    var startPos = getStartPos(x1, y1, r, theta, flipped);
-    var endPos = setEndPos(x2, y2, r, theta, flipped);
-    $(line).attr("x1", startPos.x1);
-    $(line).attr("y1", startPos.y1);
-    $(line).attr("x2", endPos.x2);
-    $(line).attr("y2", endPos.y2);
+function getEndPosOpposite(x2, y2, r, theta) {
+    return {
+        left: x2 + getWidth(r, theta),
+        top: y2 - getHeight(r, theta)
+    }
 }
 
 function getRadiusOfCircle(circle) {
     return ($(circle).width() / 2) + LINE_PADDING_VALUE;
 }
 
-function drawLine(departCircle, arriveCircle, line, flipped) {
-    var departNodePos = getOffset(departCircle);
-    var arriveNodePos = getOffset(arriveCircle);
-    var r = getRadiusOfCircle(departCircle);
+//Get coordinations of the points
+function getCoordinations(startCir, endCir) {
+    var startCenter = getOffset(startCir);
+    var endCenter = getOffset(endCir);
+    var theta = getTheta(startCenter.x, startCenter.y,
+        endCenter.x, endCenter.y);
+    var r = getRadiusOfCircle(startCir);
 
-    //modify depart position
-    x1 = departNodePos.left;
-    y1 = departNodePos.top;
-
-    //modify arrive position
-    x2 = arriveNodePos.left;
-    y2 = arriveNodePos.top;
-    centerLinePosition(line, x1, y1, x2, y2, r, flipped);
-}
-
-function draw(circles, lines) {
-    //draw dynamic lines
-    var interval_obj = setInterval(function() {
-        counter++;
-    }, LINE_TIME_INTERVAL);
-
-    //Draw lines between each node
-    for (let i = 0; i < circles.length - 1; i++) {
-        drawLine(circles[i], circles[i + 1], lines[i], false);
+    //right-ward direction
+    if (startCenter.x <= endCenter.x) {
+        var startPos = getStartPos(startCenter.x, startCenter.y, r, theta);
+        var endPos = getEndPos(endCenter.x, endCenter.y, r, theta);
+    } else { //left-ward direction
+        var startPos = getStartPosOpposite(startCenter.x, startCenter.y, r, theta);
+        var endPos = getEndPosOpposite(endCenter.x, endCenter.y, r, theta);
     }
-    drawLine(circles[2], circles[0], lines[6], true);
-    drawLine(circles[5], circles[4], lines[7], true);
+    return {
+        startPos,
+        endPos
+    }
 }
+
+//Origin point of y starts from the top not the bottom
+function drawLine(startPos, endPos, line) {
+
+    var start_x = startPos.left;
+    var start_y = startPos.top;
+    var end_x = endPos.left;
+    var end_y = endPos.top;
+
+    $(line).attr("x1", start_x);
+    $(line).attr("y1", start_y);
+    $(line).attr("x2", end_x);
+    $(line).attr("y2", end_y);
+}
+
+function initialize_and_draw_line(circles, lines) {
+    //Draw lines between each node
+    let i = 0;
+    for (i = 0;i < circles.length - 1; i++) {
+        var coord = getCoordinations(circles[i], circles[i + 1]);
+        drawLine(coord.startPos, coord.endPos, lines[i]);
+    }
+    //line 7: index 6
+    var coord = getCoordinations(circles[2], circles[0]);
+    drawLine(coord.startPos, coord.endPos, lines[++i]);
+    //line 8: index 7
+    var coord = getCoordinations(circles[4], circles[2]);
+    drawLine(coord.startPos, coord.endPos, lines[++i]);
+    //line 9: index 8
+    var coord = getCoordinations(circles[3], circles[2]);
+    drawLine(coord.startPos, coord.endPos, lines[++i]);
+}
+
+
 
 $(function() {
     var outer_circles = $('.outer_circle');
     var lines = $('.line');
-    var rotate_obj = rotate(outer_circles);
 
-    //draw additional graphics
-    draw(outer_circles, lines);
+    //setup gradual points
+    initialize_and_draw_line(outer_circles, lines);
+
+
+    var rotate_obj = rotate(outer_circles, false);
     //clearInterval(rotate_obj);
 });

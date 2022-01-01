@@ -28,8 +28,8 @@ body {
     height: 45px;
     width: 45px;
     border: 1px solid;
-    border-color: rgb(131, 39, 39);
-    border-style: dotted;
+    border-color: hsl(0, 54%, 33%);
+    border-style: dashed;
     border-width: 3px;
     border-radius: 50%;
 }
@@ -42,6 +42,30 @@ body {
     width: 90%;
     background-color: rgb(79, 116, 177);
     border-radius: 50%;
+    transition: 1s;
+}
+
+.circle:hover {
+    background-color: rgb(44, 81, 141);
+    transition: 1s;
+}
+
+.inner_circle {
+    position: relative;
+    margin: auto;
+    height: 80%;
+    width: 80%;
+    top : 10%;
+    left: 0%;
+    background-color: rgb(163, 85, 85);
+    border-radius: 50%;
+    transition: 1s;
+    z-index: -1;
+}
+
+.inner_circle:hover {
+    background-color: rgb(116, 57, 57);
+    transition: 1s;
 }
 
 svg {
@@ -51,10 +75,12 @@ svg {
 }
 
 .line {
+    transition: 2s;
     position: absolute;
     background-color: #000;
     height: 4px;
     cursor: pointer;
+    z-index: 2;
 }
 
 #outer_circle_1 {
