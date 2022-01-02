@@ -146,6 +146,70 @@ function initialize_and_draw_line(circles, lines) {
     drawLine(coord.startPos, coord.endPos, lines[++i]);
 }
 
+function change_circle_color_on_hover() {
+    $('#text_box_1').hover(function() {
+        $('#circle_1 .inner_circle').css('background-color', 'rgb(116, 57, 57)');
+        $('#text_box_1').css('color', 'rgba(219, 107, 107, 0.918)');
+      }, function() {
+        // on mouseout, reset the background colour
+        $('#circle_1 .inner_circle').css('background-color', 'rgb(163, 85, 85)');
+        $('#text_box_1').css('color', 'white');
+    });
+
+    $('#text_box_2').hover(function() {
+        $('#circle_2').css('background-color', 'rgb(44, 81, 141)');
+        $('#text_box_2').css('color', 'rgba(219, 107, 107, 0.918)');
+      }, function() {
+        // on mouseout, reset the background colour
+        $('#circle_2').css('background-color', 'rgb(79, 116, 177)');
+        $('#text_box_2').css('color', 'white');
+    });
+
+    $('#text_box_3').hover(function() {
+        $('#circle_3').css('background-color', 'rgb(44, 81, 141)');
+        $('#text_box_3').css('color', 'rgba(219, 107, 107, 0.918)');
+      }, function() {
+        // on mouseout, reset the background colour
+        $('#circle_3').css('background-color', 'rgb(79, 116, 177)');
+        $('#text_box_3').css('color', 'white');
+    });
+
+    $('#text_box_4').hover(function() {
+        $('#circle_4').css('background-color', 'rgb(44, 81, 141)');
+        $('#text_box_4').css('color', 'rgba(219, 107, 107, 0.918)');
+      }, function() {
+        // on mouseout, reset the background colour
+        $('#circle_4').css('background-color', 'rgb(79, 116, 177)');
+        $('#text_box_4').css('color', 'white');
+    });
+
+    $('#text_box_5').hover(function() {
+        $('#circle_5').css('background-color', 'rgb(44, 81, 141)');
+        $('#text_box_5').css('color', 'rgba(219, 107, 107, 0.918)');
+      }, function() {
+        // on mouseout, reset the background colour
+        $('#circle_5').css('background-color', 'rgb(79, 116, 177)');
+        $('#text_box_5').css('color', 'white');
+    });
+
+    $('#text_box_6').hover(function() {
+        $('#circle_6').css('background-color', 'rgb(44, 81, 141)');
+        $('#text_box_6').css('color', 'rgba(219, 107, 107, 0.918)');
+      }, function() {
+        // on mouseout, reset the background colour
+        $('#circle_6').css('background-color', 'rgb(79, 116, 177)');
+        $('#text_box_6').css('color', 'white');
+    });
+
+    $('#text_box_7').hover(function() {
+        $('#circle_7 .inner_circle').css('background-color', 'rgb(116, 57, 57)');
+        $('#text_box_7').css('color', 'rgba(219, 107, 107, 0.918)');
+      }, function() {
+        // on mouseout, reset the background colour
+        $('#circle_7 .inner_circle').css('background-color', 'rgb(163, 85, 85)');
+        $('#text_box_7').css('color', 'white');
+    });
+}
 
 
 $(function() {
@@ -157,4 +221,7 @@ $(function() {
 
     var rotate_obj = rotate(outer_circles, false);
     //clearInterval(rotate_obj);
+
+    change_circle_color_on_hover();
+
 });

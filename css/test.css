@@ -145,6 +145,7 @@ svg {
     margin-top: 16px;
     font-family: 'Poppins', sans-serif;
     color: rgb(255, 255, 255);
+    transition: 1s;
 }
 
 .text_box_content {
@@ -165,20 +166,8 @@ svg {
     white-space:nowrap;
 }
 
-#outer_circle_1:hover + #text_box_1 span,
-#outer_circle_2:hover + #text_box_2 span,
-#outer_circle_3:hover + #text_box_3 span,
-#outer_circle_4:hover + #text_box_4 span,
-#outer_circle_5:hover + #text_box_5 span,
-#outer_circle_6:hover + #text_box_6 span,
-#outer_circle_7:hover + #text_box_7 span,
-#text_box_1:hover > span,
-#text_box_2:hover > span,
-#text_box_3:hover > span,
-#text_box_4:hover > span,
-#text_box_5:hover > span,
-#text_box_6:hover > span,
-#text_box_7:hover > span {
+.outer_circle:hover + .text_box span,
+.text_box:hover > span {
     content: attr(title);
     opacity: 0.8;
     background-color: black;
