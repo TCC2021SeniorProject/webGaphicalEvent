@@ -86,6 +86,16 @@ svg {
     fill: rgb(84, 113, 177);
 }
 
+.transition_text {
+    position: absolute;
+    text-align: center;
+    width: 70px;
+    height: 40px;
+    font-size: 6px;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(25, 43, 149);
+}
+
 #outer_circle_1,
 #text_box_1 {
     top : 30%;
@@ -133,6 +143,7 @@ svg {
 #circle_1, #circle_7 {
     background-color: rgb(255, 127, 127);
 }
+
 
 .text_box {
     position: absolute;
