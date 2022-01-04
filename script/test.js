@@ -47,6 +47,12 @@ function getOffset(element) {
 }
 
 function getTheta(x1, y1, x2, y2) {
+    var value = -(y2 - y1) / (x2 - x1);
+    if ((x2 - x1) == 0) {
+        return Math.atan(-180);
+    } else if ((y2 - y1) == 0) {
+        return Math.atan(0);
+    }
     return Math.atan(-(y2 - y1) / (x2 - x1));
 }
 
@@ -96,6 +102,7 @@ function getRadiusOfCircle(circle) {
 function getCoordinations(startCir, endCir) {
     var startCenter = getOffset(startCir);
     var endCenter = getOffset(endCir);
+
     var theta = getTheta(startCenter.x, startCenter.y,
         endCenter.x, endCenter.y);
     var r = getRadiusOfCircle(startCir);
@@ -116,9 +123,11 @@ function getCoordinations(startCir, endCir) {
 
 
 
-function getMidPoint(startPos, endPos) {
-    var midPointX = startPos.left + ((endPos.left - startPos.left) / 2) - 25;
-    var midPointY = startPos.top + ((endPos.top - startPos.top) / 2) - 6;
+function getMidPoint(startPos, endPos, transition_text) {
+    var width = $(transition_text).width();
+    var height = $(transition_text).height();
+    var midPointX = startPos.left + ((endPos.left - startPos.left) / 2) - width / 2;
+    var midPointY = startPos.top + ((endPos.top - startPos.top) / 2) - height / 1.8;
     return {
         midPointX,
         midPointY,
@@ -127,14 +136,21 @@ function getMidPoint(startPos, endPos) {
 
 function setTransTextPos (coordinations, transition_texts) {
     var midPoints = []
+    var tilt_list = []
     for (let index = 0; index < coordinations.length; index++) {
-        midPoints.push(getMidPoint(coordinations[index].startPos,
-             coordinations[index].endPos));
+        var startP = coordinations[index].startPos;
+        var endP = coordinations[index].endPos;
+        midPoints.push(getMidPoint(startP, endP, transition_texts[index]));
+        if (startP != null && endP != null) {
+            console.log(startP.left);
+            tilt_list.push(getTheta(startP.left, startP.top, endP.left, endP.top));
+        }
     }
 
-    for (let index = 0; index < transition_texts.length; index++) {
+    for (let index = 0; index < coordinations.length; index++) {
         $(transition_texts[index]).css("left", midPoints[index].midPointX);
         $(transition_texts[index]).css("top", midPoints[index].midPointY);
+        $(transition_texts[index]).css('transform', 'rotate(' + -tilt_list[index] + 'rad)');
     }
 }
 

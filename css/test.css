@@ -93,7 +93,7 @@ svg {
     height: 40px;
     font-size: 6px;
     font-family: 'Poppins', sans-serif;
-    color: rgb(25, 43, 149);
+    color: hsl(310, 75%, 27%);
 }
 
 #outer_circle_1,
